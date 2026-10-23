@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {defaultState,freshTurn,toggleTurnAction,spend,restoreState,cast} from '../rules.js';
 import {SPELLS,INFUSIONS} from '../data.js';
-import {spellActionKind,combatOptions} from '../combat.js';
+import {spellActionKind,combatOptions,bonusSpellRuleConflict} from '../combat.js';
 
 function hero(level=5){
  const s=defaultState();s.configured=true;s.character.level=level;
@@ -64,4 +64,16 @@ test('spell classification uses true casting time, not spell level or descriptio
  assert.equal(spellActionKind(SPELLS.find(s=>s.id==='healing-word')),'bonus');
  assert.equal(spellActionKind(SPELLS.find(s=>s.id==='feather-fall')),'reaction');
  assert.equal(spellActionKind(SPELLS.find(s=>s.id==='mending')),null);
+});
+
+test('2014 bonus-action spell rule blocks the second leveled spell in the same turn',()=>{
+ const s=hero();
+ s.turn.bonus=true;s.turn.chosen.bonus='Лечащее слово';
+ assert.ok(options(s,'action').find(x=>x.key==='spell:web').disabled);
+ assert.equal(options(s,'action').find(x=>x.key==='spell:fire-bolt').disabled,false);
+ assert.ok(bonusSpellRuleConflict(s,SPELLS,SPELLS.find(x=>x.id==='web')));
+ s.turn.bonus=false;delete s.turn.chosen.bonus;
+ s.turn.action=true;s.turn.chosen.action='Паутина';
+ assert.ok(bonusSpellRuleConflict(s,SPELLS,SPELLS.find(x=>x.id==='healing-word')));
+ assert.ok(options(s,'bonus').find(x=>x.key==='spell:healing-word').disabled);
 });
