@@ -1,0 +1,1 @@
+{"name":"alchemist-companion","version":"1.0.0","type":"module","scripts":{"test":"node --test tests/*.test.js","dev":"node server.js"},"private":true}
