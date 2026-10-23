@@ -321,3 +321,84 @@ header.brand{min-height:72px;border-bottom:2px solid #b99a65}header.brand>a{colo
  .screen-play .resource .pips button.resource-pip,
  .screen-play .elixir-card .pips button.resource-pip{width:40px;min-width:40px;height:40px;min-height:40px}
 }
+
+
+/* BG3-inspired three-slot combat deck, tailored to the existing parchment/brass design. */
+.battle-deck{border:1px solid #ad9462;background:radial-gradient(circle at 50% 0,#f8edce 0,#e7d5ac 78%);border-radius:17px;padding:14px;margin:0 0 12px;box-shadow:inset 0 0 0 3px #f8eddb,0 4px 10px #463d2b1b}
+.battle-deck-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.battle-deck-head>div{display:flex;flex-direction:column;gap:3px}
+.battle-deck-head strong{font-family:Georgia,serif;font-size:21px;color:#264337}
+.battle-deck-head button{background:#f8efda;border-color:#bba16b;font-size:12px;white-space:nowrap}
+.battle-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.battle-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:136px;padding:13px 7px;border-radius:14px;border:2px solid #b19967;background:linear-gradient(170deg,#fdf6e4,#eaddc1);box-shadow:inset 0 0 0 3px #fdf7e9,0 4px 0 #bca47439;transition:transform .13s,background .13s,box-shadow .13s}
+.battle-slot.ready .battle-orb{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#e8c989,#ae8044 70%,#655133);border:3px solid #725834;box-shadow:inset 0 0 0 4px #dcb87f,0 3px 10px #2a241d30;color:#fbf4df;font-size:29px}
+.battle-slot.spent{background:#d8d0bb;border-color:#c5b9a1;box-shadow:inset 0 0 0 3px #e6ddca;color:#827969}
+.battle-slot.spent .battle-orb{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#cfc7b5;border:3px dashed #afa28e;color:#897d69;font-size:31px}
+.battle-slot.selected{border-color:#2e624e;box-shadow:inset 0 0 0 3px #f8f0da,0 0 0 3px #4d7a5b;transform:translateY(-2px)}
+.battle-title{font-family:Georgia,serif;font-size:16px;font-weight:700;line-height:1.1;color:#304a3d}
+.battle-slot.spent .battle-title{color:#857c6a}
+.battle-status{font-size:11px;line-height:1.22;color:#7f683f;min-height:13px;text-align:center;max-width:100%;overflow-wrap:anywhere}
+.battle-slot.spent .battle-status{color:#877b6b}
+.battle-help,.battle-hint{font-size:11px;line-height:1.4;color:#78694d;margin:10px 0 0}
+.combat-placeholder{border:1px dashed #c8b68d;border-radius:14px;background:#f8f0dd9b;min-height:126px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:22px 15px;text-align:center;margin:12px 0 16px}
+.combat-placeholder .combat-prompt-icon{font-size:24px;color:#a0824c;margin-bottom:5px}
+.combat-placeholder strong{font-family:Georgia,serif;font-size:17px;color:#365243}
+.combat-placeholder p{font-size:12px;max-width:350px;margin:7px 0 0;color:#767266;line-height:1.5}
+.combat-picker{border:1px solid #c9b485;background:#f9f1df;border-radius:14px;padding:13px;margin:10px 0 16px;box-shadow:0 5px 15px #50432d17}
+.combat-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+.combat-picker-head h2{font-size:23px;line-height:1.15;margin:3px 0 0}
+.combat-categories{display:grid;gap:7px}
+.combat-category{margin:0;border:1px solid #ccbd9c;background:#fff9ea;border-radius:10px;overflow:hidden}
+.combat-category>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:11px 13px;background:#ece0c2;color:#344c3e;font-size:13px;font-weight:800;list-style:none}
+.combat-category>summary::-webkit-details-marker{display:none}
+.combat-category>summary::before{content:'+';color:#866b39;font-size:17px;margin-right:3px}
+.combat-category[open]>summary::before{content:'−'}
+.combat-category>summary>span{flex:1}
+.combat-category>summary>b{border-radius:10px;font-size:11px;padding:2px 7px;background:#fbf4e4;color:#6f663f}
+.combat-option-list{padding:3px 7px}
+.combat-option{width:100%;display:flex;align-items:center;gap:7px;min-height:57px;text-align:left;padding:9px 8px;background:transparent;border:0;border-bottom:1px solid #e9dfc9;border-radius:0;font-weight:500}
+.combat-option:last-child{border-bottom:0}
+.combat-option:hover{background:#f0e5d0}
+.combat-option:disabled{opacity:.42}
+.combat-option-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px}
+.combat-option-copy strong{font-size:13px;font-weight:800;color:#2e4d3d}
+.combat-option-copy small{font-size:11px;line-height:1.25;color:#7b755f}
+.combat-option-arrow{font-size:26px;line-height:1;color:#967c4c}
+.combat-modal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.combat-modal-actions button{flex:1 1 110px}
+.used-picker p{font-size:13px;color:#786c55;line-height:1.5}
+.battle-resources{margin:10px 0 13px;border:1px solid #bdac86;border-radius:13px;background:#f8f0df;overflow:hidden}
+.battle-resources>summary{min-height:49px;padding:12px 14px;color:#365445;font-size:13px;font-weight:800;background:#eee0c0;list-style:none}
+.battle-resources>summary::before{content:'⚗';display:inline-block;margin-right:10px}
+.battle-resources-content{padding:12px}
+.battle-resources-content .resource-grid{margin-bottom:12px}
+.battle-resources .stats{padding:12px;margin:0}
+.battle-resources>.resource-hint,.battle-resources>button{margin:0 12px 12px}
+.battle-feature-status{font-size:12px;padding:8px 2px;color:#4b5f47}
+@media(max-width:680px){
+ .screen-play .hero{padding:3px 0 10px}
+ .battle-deck{padding:10px 9px 9px;margin-bottom:8px}
+ .battle-deck-head{margin-bottom:8px}
+ .battle-deck-head strong{font-size:18px}
+ .battle-deck-head button{min-height:38px;padding:7px 10px;font-size:11px}
+ .battle-slots{gap:6px}
+ .battle-slot{gap:5px;min-height:108px;padding:8px 3px;border-radius:11px}
+ .battle-slot.ready .battle-orb,.battle-slot.spent .battle-orb{height:46px;width:46px;font-size:24px}
+ .battle-title{font-size:12px}
+ .battle-status{font-size:9px}
+ .battle-help,.battle-hint{font-size:10px;margin-top:7px}
+ .combat-placeholder{min-height:103px;margin:8px 0 11px;padding:13px}
+ .combat-picker{padding:9px;margin:7px 0 11px}
+ .combat-picker-head h2{font-size:21px}
+ .combat-category>summary{min-height:43px;padding:9px 11px}
+ .combat-option{min-height:54px;padding:8px 6px}
+ .combat-option-copy strong{font-size:12px}
+ .combat-option-copy small{font-size:10px}
+ .battle-resources{margin:9px 0}
+ .battle-resources>summary{padding:10px 12px;min-height:45px}
+}
+@media(max-width:360px){
+ .battle-title{font-size:11px}
+ .battle-slots{gap:4px}
+ .battle-slot.ready .battle-orb,.battle-slot.spent .battle-orb{width:41px;height:41px}
+}
