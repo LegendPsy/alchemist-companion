@@ -37,7 +37,6 @@ test('confirmation dialogs have only two distinct actions: Cancel and Confirm', 
     assert.equal(dialog.showModalCalled, 1);
     assert.equal((dialog.innerHTML.match(/<button/g) || []).length, 2);
     assert.equal((dialog.innerHTML.match(/data-action="close"/g) || []).length, 1);
-    assert.equal((dialog.innerHTML.match(/data-action="${action}"/g) || []).length, 0); // action is matched exactly below
     assert.ok(dialog.innerHTML.includes('data-action="' + action + '"'));
     assert.ok(!dialog.innerHTML.includes('>×<'));
   }
