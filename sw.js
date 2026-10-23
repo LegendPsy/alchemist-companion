@@ -30,7 +30,7 @@ self.addEventListener('fetch',event=>{
       if(!fresh.ok)throw new Error('HTTP '+fresh.status);
       const cache=await caches.open(CACHE);
       const key=request.mode==='navigate'?'./index.html':request;
-      event.waitUntil(cache.put(key,fresh.clone()).catch(()=>{}));
+      await cache.put(key,fresh.clone()).catch(()=>{});
       return fresh;
     }catch(error){
       const cached=await caches.match(request);
