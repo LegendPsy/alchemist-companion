@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mod, limits, defaultState, available, spend, longRest, validate, cast, restoreState } from '../rules.js';
+import { mod, limits, defaultState, available, spend, longRest, freshTurn, toggleTurnAction, toggleResourceCell, syncResourceMarks, validate, cast, restoreState } from '../rules.js';
 import { SPELLS, INFUSIONS } from '../data.js';
 
 const spell = id => SPELLS.find(s => s.id === id);
@@ -55,6 +55,80 @@ test('finishing character setup does not require class skills after removing the
     assert.equal(restored.configured, true);
     assert.deepEqual(restored.character.skills, []);
   }
+});
+
+
+test('manual action and bonus-action toggles stay independent and reset on new turn or a long rest', () => {
+  const s = ready(5);
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
+  assert.equal(toggleTurnAction(s, 'action'), true);
+  assert.equal(s.turn.bonus, false);
+  assert.equal(toggleTurnAction(s, 'bonus'), true);
+  assert.deepEqual(s.turn, { number: 1, action: true, bonus: true });
+  assert.equal(toggleTurnAction(s, 'action'), false);
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: true });
+  freshTurn(s);
+  assert.deepEqual(s.turn, { number: 2, action: false, bonus: false });
+  toggleTurnAction(s, 'action');
+  freshTurn(s, { resetCount: true });
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
+  toggleTurnAction(s, 'bonus');
+  longRest(s);
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
+  assert.throws(() => toggleTurnAction(s, 'reaction'));
+});
+
+test('clicking one particular spell or free-elixir cell changes that exact cell and its shared count', () => {
+  const s = ready(6);
+  assert.equal(toggleResourceCell(s, 'slots', 0, 2), true);
+  assert.deepEqual(s.spent.slots, [1, 0]);
+  assert.deepEqual(s.resourceMarks.slots[0], [2]);
+  assert.equal(toggleResourceCell(s, 'slots', 0, 0), true);
+  assert.deepEqual(new Set(s.resourceMarks.slots[0]), new Set([2, 0]));
+  assert.equal(toggleResourceCell(s, 'slots', 0, 2), false);
+  assert.deepEqual(s.spent.slots, [1, 0]);
+  assert.deepEqual(s.resourceMarks.slots[0], [0]);
+  assert.equal(toggleResourceCell(s, 'elixirs', 0, 1), true);
+  assert.deepEqual(s.resourceMarks.elixirs, [1]);
+  assert.equal(toggleResourceCell(s, 'elixirs', 0, 1), false);
+  assert.deepEqual(s.resourceMarks.elixirs, []);
+  assert.equal(s.spent.elixirs, 0);
+  assert.throws(() => toggleResourceCell(s, 'slots', 0, 5));
+});
+
+test('casting spells and brewing elixirs keep manual cell marks in sync across save and long rest', () => {
+  const s = ready(7);
+  toggleResourceCell(s, 'slots', 0, 3);
+  cast(s, spell('cure-wounds'), 1);
+  spend(s, 'elixirs');
+  syncResourceMarks(s);
+  assert.deepEqual(new Set(s.resourceMarks.slots[0]), new Set([3, 0]));
+  assert.deepEqual(s.resourceMarks.elixirs, [0]);
+  toggleTurnAction(s, 'action');
+  const restored = restoreState(JSON.parse(JSON.stringify(s)), SPELLS, INFUSIONS);
+  assert.deepEqual(restored, s);
+  assert.equal(restored.turn.action, true);
+  assert.deepEqual(restored.resourceMarks.slots[0], s.resourceMarks.slots[0]);
+  longRest(restored);
+  assert.deepEqual(restored.resourceMarks.slots, [[], []]);
+  assert.deepEqual(restored.resourceMarks.elixirs, []);
+  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false });
+  assert.deepEqual(restored.spent.slots, [0, 0]);
+  assert.equal(restored.spent.elixirs, 0);
+});
+
+test('older saves without turn and cell markers migrate without losing used resources', () => {
+  const s = ready(5);
+  spend(s, 'slots', 0);
+  spend(s, 'elixirs');
+  delete s.turn;
+  delete s.resourceMarks;
+  const restored = restoreState(s, SPELLS, INFUSIONS);
+  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false });
+  assert.equal(restored.resourceMarks.slots[0].length, 1);
+  assert.equal(restored.resourceMarks.elixirs.length, 1);
+  assert.deepEqual(restored.spent.slots, [1, 0]);
+  assert.equal(restored.spent.elixirs, 1);
 });
 
 test('2014 artificer level boundaries: slots, preparation, infusions and subclass features', () => {
@@ -246,6 +320,7 @@ test('JSON save/load round-trip preserves actual progress, concentration, notes 
   s.character.notes = 'Гном. Проверить противоядие.';
   s.log = [{ text: 'Паутина · ячейка 2', time: '2026-10-23T10:00:00.000Z' }];
   s.updatedAt = '2026-10-23T10:00:00.000Z';
+  syncResourceMarks(s);
   const restored = restoreState(JSON.parse(JSON.stringify(s)), SPELLS, INFUSIONS);
   assert.deepEqual(restored, s);
   assert.equal(available(restored, 'slots', 1), 2);
