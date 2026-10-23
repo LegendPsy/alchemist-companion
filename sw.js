@@ -1,4 +1,4 @@
-const CACHE='alchemist-v1';
+const CACHE='alchemist-v2';
 const FILES=['./','./index.html','./app.js','./rules.js','./data.js','./style.css','./icon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES))));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('alchemist-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

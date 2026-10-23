@@ -61,7 +61,21 @@ function infusionExtra(x,c){if(x.id==='enhanced-focus')return `<div class="notic
 function useInfusion(x){if(!x||!state.character.active.includes(x.id))throw Error('Инфузия не применена');if((state.spent.infusions[x.id]||0)>=x.charges)throw Error('Заряды закончились');state.spent.infusions[x.id]=(state.spent.infusions[x.id]||0)+1;}
 document.addEventListener('input',e=>{const el=e.target;if(el.id==='spell-search'){query=el.value;const start=el.selectionStart;render();$('#spell-search').focus();if(start!==null)try{$('#spell-search').setSelectionRange(start,start);}catch{}return;}if(!draft)return;if(el.id==='char-name')draft.name=el.value;if(el.id==='char-notes')draft.notes=el.value;saveDraft();});
 document.addEventListener('change',async e=>{const el=e.target;if(el.id==='import-file'){const file=el.files[0];if(!file)return;try{if(file.size>200000)throw Error('Слишком большой файл');const restored=restoreState(JSON.parse(await file.text()),SPELLS,INFUSIONS);undo=structuredClone(state);state=restored;saveError=false;save();tab=state.configured?'play':'setup';draft=state.configured?null:structuredClone(state.character);saveDraft();render();toast('Сохранение загружено');}catch(err){toast('Не удалось загрузить файл: '+err.message);}return;}if(!draft)return;if(el.dataset.ability){draft.abilities[el.dataset.ability]=Number(el.value);saveDraft();render();}if(el.id==='char-level'){draft.level=Number(el.value);saveDraft();render();}if(el.dataset.choice){const key=el.dataset.choice,id=el.value,l=limits(draft),max=({skills:2,cantrips:2,prepared:l.prepared,known:l.known,active:l.active})[key];if(el.checked){if(draft[key].length>=max){el.checked=false;toast('Достигнут лимит: '+max+'. Сначала снимите другой выбор.');return;}draft[key].push(id);}else{draft[key]=draft[key].filter(x=>x!==id);if(key==='known')draft.active=draft.active.filter(x=>x!==id);}saveDraft();render();}});
-render();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>toast('Офлайн-режим пока недоступен. Онлайн-приложение работает.'));
+const backToTop=document.createElement('button');
+backToTop.className='back-to-top';
+backToTop.type='button';
+backToTop.textContent='↑ Наверх';
+backToTop.setAttribute('aria-label','Вернуться к началу экрана');
+backToTop.hidden=true;
+document.body.append(backToTop);
+const updateBackToTop=()=>{backToTop.hidden=window.scrollY<400;};
+window.addEventListener('scroll',updateBackToTop,{passive:true});
+backToTop.addEventListener('click',()=>{
+ const heading=document.querySelector('main h1');
+ if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
+ window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+});
+render();updateBackToTop();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>toast('Офлайн-режим пока недоступен. Онлайн-приложение работает.'));
 
 
 
