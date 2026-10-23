@@ -57,3 +57,11 @@ header.brand{min-height:72px;border-bottom:2px solid #b99a65}header.brand>a{colo
 .back-to-top{background:#304b3c;border-color:#b99b63}.bottom-nav{background:#f8efdceF;border-top:2px solid #bfa879}.bottom-nav button.active{background:#d9c59d;color:#263c32}
 .backup-fold{background:#f9f1df;border:1px solid var(--line);border-radius:11px;padding:0 12px}.backup-fold summary{font-size:12px}
 @media(max-width:680px){.shell{padding-left:14px;padding-right:14px}.hero-art{width:65px;height:65px;flex-basis:65px;padding:13px}.hero{padding:14px 0;margin-bottom:14px}.hero h1{font-size:29px}.stats{gap:6px;margin-bottom:17px}.stat{padding:12px 8px}.stat strong{font-size:23px}.stat span{font-size:9px}.quick-card{padding:15px}.quick-card h3{font-size:15px}.fold>summary{font-size:13px}.rest-grid.compact-rest{gap:5px}.rest-grid.compact-rest button{font-size:11px;padding:10px 3px}.bottom-nav button{font-size:10px}}
+
+/* Selection and description are independent controls. */
+.choice-row .choice-label{flex:1;min-width:0;padding:9px 2px;font-size:13px;font-weight:650;line-height:1.45;color:var(--ink)}
+.choice-row .choice-detail{flex:0 0 44px;width:44px;height:44px;min-height:44px;padding:0;border:1px solid #c5ac7d;border-radius:10px;background:#f1e0be;color:#71552c;font-size:24px;display:grid;place-items:center}
+.choice-row .choice-detail:hover{background:#e3cda4}
+.choice-row .choice-check{flex:0 0 42px;min-width:42px;min-height:44px;cursor:pointer}
+.choice-row .choice-check input{width:22px;height:22px}
+.choice-row .chosen-dot{margin-left:0;color:#3f6b4d}
