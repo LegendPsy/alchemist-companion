@@ -626,3 +626,26 @@ body.combat-mode::before{
  background:linear-gradient(#e8dcc3,#dfceb0);
  z-index:1;pointer-events:none;
 }
+
+
+/* Restored original text-first combat ability picker.
+   Only the upper action/resource console uses the illustrated hotbar. */
+body.combat-mode .screen-play .combat-picker{
+  background:#f9f1df;
+  color:#344c3e;
+  border:1px solid #c9b485;
+  box-shadow:0 5px 15px #0005;
+}
+body.combat-mode .screen-play .combat-picker-head h2{
+  color:#344c3e;
+  font-family:Georgia,serif;
+}
+body.combat-mode .screen-play .combat-picker .battle-hint{
+  color:#78694d;
+}
+body.combat-mode .screen-play .combat-picker .combat-option{
+  color:#344c3e;
+}
+body.combat-mode .screen-play .combat-picker.used-picker p{
+  color:#786c55;
+}
