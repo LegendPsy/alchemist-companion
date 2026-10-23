@@ -238,3 +238,86 @@ header.brand{min-height:72px;border-bottom:2px solid #b99a65}header.brand>a{colo
   .screen-setup .ability-grid label{padding:5px 3px}
   .screen-setup .sticky-actions{padding:5px}
 }
+
+
+/* Interactive spell & elixir charge cells and the two manual turn actions. */
+.screen-play .resource-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.screen-play .card.resource{padding:13px 12px}
+.screen-play .resource .card-top{align-items:center;margin-bottom:11px}
+.screen-play .resource .card-top h3{font-size:15px;margin:0}
+.screen-play .resource .card-top .tag{font-size:12px;background:#e9d8b5;color:#3f5a48;border-color:#c2a973}
+.interactive-pips{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.screen-play .resource .pips button.resource-pip,
+.screen-play .elixir-card .pips button.resource-pip{
+  display:grid;place-items:center;
+  width:44px;height:44px;min-width:44px;min-height:44px;
+  padding:0;box-shadow:inset 0 0 0 2px #fbf3df,0 2px 0 #937b5930;
+  border:2px solid #7f987a;border-radius:11px;
+  background:#32604e;color:#fff6da;
+  font-family:Georgia,serif;font-size:20px;font-weight:800;
+  transition:background .12s,transform .12s,border-color .12s;
+}
+.screen-play .resource .pips button.resource-pip.used,
+.screen-play .elixir-card .pips button.resource-pip.used{
+  background:#e1d9c7;border:2px dashed #b6a790;color:#9c9486;
+  box-shadow:none;
+}
+.screen-play .resource .pips button.resource-pip.used::after,
+.screen-play .elixir-card .pips button.resource-pip.used::after{display:none}
+.screen-play .resource .pips button.resource-pip:active,
+.screen-play .elixir-card .pips button.resource-pip:active{transform:scale(.94)}
+.screen-play .resource .pips button.resource-pip:focus-visible,
+.screen-play .elixir-card .pips button.resource-pip:focus-visible{outline:3px solid #b18233;outline-offset:2px}
+.resource-hint{font-size:11px;line-height:1.4;color:#736d5c;margin:0 0 9px}
+.elixir-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.elixir-summary{flex:1 1 145px;min-width:0}
+.elixir-summary h3{margin:0 0 4px}
+.elixir-summary small{display:block;margin:0 0 8px;color:#6e7267}
+.elixir-card .actions{margin:0;flex:1 1 170px}
+.elixir-card .interactive-pips{margin-top:8px}
+.elixir-card .elixir-hint{flex:1 1 100%;margin:0;font-size:10px;color:#746d5e}
+
+.turn-panel{background:linear-gradient(145deg,#e6d4ab,#efe2c4 70%,#e6d9bb);border:1px solid #bea16c;border-radius:14px;padding:12px;box-shadow:0 3px 0 #8c734327;margin:9px 0 15px}
+.turn-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.turn-head>div{display:flex;flex-direction:column;gap:3px}
+.turn-head strong{font-family:Georgia,serif;font-size:20px;font-weight:600;color:#2b4437}
+.turn-eyebrow{font-size:9px;letter-spacing:1.2px;color:#816634;font-weight:800}
+.turn-head button{white-space:nowrap;background:#f9efda;border-color:#ad9266;color:#294639}
+.turn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.turn-cell{display:flex;align-items:center;text-align:left;gap:8px;min-width:0;min-height:62px;padding:10px;background:#f8f2e3;border:2px solid #98aa86;border-radius:11px;color:#284e3d}
+.turn-cell .turn-token{flex:0 0 28px;height:28px;width:28px;border:1px solid #7a9472;border-radius:8px;display:grid;place-items:center;background:#dce9d6;font-weight:800;font-size:17px}
+.turn-cell .turn-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.turn-cell strong{font-size:12px;line-height:1.22;font-weight:800;white-space:normal}
+.turn-cell small{font-size:10px;line-height:1.25;color:#4f6b58}
+.turn-cell .turn-indicator{font-size:16px;font-weight:900}
+.turn-cell.spent{border-color:#b9ad96;background:#e0d6c3;color:#827763}
+.turn-cell.spent .turn-token{border-color:#b6ab96;background:#d0c4b1;color:#827763}
+.turn-cell.spent small{color:#8c806d}
+.turn-note{margin:8px 0 0;font-size:10px;line-height:1.4;color:#766e59}
+
+@media(max-width:680px){
+  .turn-panel{padding:9px 10px;margin:7px 0 11px}
+  .turn-head{margin-bottom:7px}
+  .turn-head strong{font-size:18px}
+  .turn-head button{padding:7px 10px;min-height:40px;font-size:11px}
+  .turn-cell{gap:6px;padding:8px;min-height:58px}
+  .turn-cell .turn-token{flex-basis:25px;width:25px;height:25px;font-size:15px}
+  .turn-cell strong{font-size:11px}
+  .turn-cell small{font-size:9px}
+  .turn-cell .turn-indicator{font-size:13px}
+  .turn-note{font-size:9px}
+  .screen-play .card.resource{padding:10px}
+  .screen-play .resource .pips button.resource-pip,
+  .screen-play .elixir-card .pips button.resource-pip{width:42px;min-width:42px;height:42px;min-height:42px;border-radius:9px}
+  .interactive-pips{gap:6px}
+  .elixir-card{gap:7px}
+  .elixir-card .actions{flex-basis:145px}
+  .elixir-card .resource-hint{font-size:10px}
+  .resource-hint{font-size:10px}
+}
+@media(max-width:360px){
+ .turn-grid{gap:6px}
+ .turn-cell .turn-token{flex-basis:22px;width:22px;height:22px}
+ .screen-play .resource .pips button.resource-pip,
+ .screen-play .elixir-card .pips button.resource-pip{width:40px;min-width:40px;height:40px;min-height:40px}
+}
