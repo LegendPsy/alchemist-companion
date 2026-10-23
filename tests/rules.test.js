@@ -60,22 +60,25 @@ test('finishing character setup does not require class skills after removing the
 
 test('manual action and bonus-action toggles stay independent and reset on new turn or a long rest', () => {
   const s = ready(5);
-  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false, reaction: false, chosen: {} });
   assert.equal(toggleTurnAction(s, 'action'), true);
   assert.equal(s.turn.bonus, false);
   assert.equal(toggleTurnAction(s, 'bonus'), true);
-  assert.deepEqual(s.turn, { number: 1, action: true, bonus: true });
+  assert.deepEqual(s.turn, { number: 1, action: true, bonus: true, reaction: false, chosen: {} });
   assert.equal(toggleTurnAction(s, 'action'), false);
-  assert.deepEqual(s.turn, { number: 1, action: false, bonus: true });
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: true, reaction: false, chosen: {} });
   freshTurn(s);
-  assert.deepEqual(s.turn, { number: 2, action: false, bonus: false });
+  assert.deepEqual(s.turn, { number: 2, action: false, bonus: false, reaction: false, chosen: {} });
   toggleTurnAction(s, 'action');
   freshTurn(s, { resetCount: true });
-  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false, reaction: false, chosen: {} });
   toggleTurnAction(s, 'bonus');
   longRest(s);
-  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false });
-  assert.throws(() => toggleTurnAction(s, 'reaction'));
+  assert.deepEqual(s.turn, { number: 1, action: false, bonus: false, reaction: false, chosen: {} });
+  assert.equal(toggleTurnAction(s, 'reaction'), true);
+  assert.equal(s.turn.reaction, true);
+  assert.equal(toggleTurnAction(s, 'reaction'), false);
+  assert.throws(() => toggleTurnAction(s, 'impossible'));
 });
 
 test('clicking one particular spell or free-elixir cell changes that exact cell and its shared count', () => {
@@ -112,7 +115,7 @@ test('casting spells and brewing elixirs keep manual cell marks in sync across s
   longRest(restored);
   assert.deepEqual(restored.resourceMarks.slots, [[], []]);
   assert.deepEqual(restored.resourceMarks.elixirs, []);
-  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false });
+  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false, reaction: false, chosen: {} });
   assert.deepEqual(restored.spent.slots, [0, 0]);
   assert.equal(restored.spent.elixirs, 0);
 });
@@ -124,7 +127,7 @@ test('older saves without turn and cell markers migrate without losing used reso
   delete s.turn;
   delete s.resourceMarks;
   const restored = restoreState(s, SPELLS, INFUSIONS);
-  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false });
+  assert.deepEqual(restored.turn, { number: 1, action: false, bonus: false, reaction: false, chosen: {} });
   assert.equal(restored.resourceMarks.slots[0].length, 1);
   assert.equal(restored.resourceMarks.elixirs.length, 1);
   assert.deepEqual(restored.spent.slots, [1, 0]);
