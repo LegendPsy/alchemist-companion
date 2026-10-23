@@ -618,3 +618,11 @@ body:has(.screen-play) #toast{background:#292014;color:#f6dfb6;border:1px solid 
 @media(prefers-reduced-motion:reduce){
  .hot-tile,.war-action,.war-resource .interactive-pips button{transition:none;}
 }
+
+/* iOS PWA status bar: readable dark system text over a warm safe-area strip. */
+body:has(.screen-play)::before{
+ content:'';position:fixed;top:0;left:0;right:0;
+ height:env(safe-area-inset-top,0px);
+ background:linear-gradient(#e8dcc3,#dfceb0);
+ z-index:1;pointer-events:none;
+}
