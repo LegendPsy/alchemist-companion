@@ -402,3 +402,8 @@ header.brand{min-height:72px;border-bottom:2px solid #b99a65}header.brand>a{colo
  .battle-slots{gap:4px}
  .battle-slot.ready .battle-orb,.battle-slot.spent .battle-orb{width:41px;height:41px}
 }
+
+/* Combat resources are now permanently visible, with a static section heading. */
+.battle-resources-title{margin:0;min-height:49px;padding:12px 14px;color:#365445;font-size:13px;font-weight:800;background:#eee0c0;line-height:1.4}
+.battle-resources-title::before{content:'⚗';display:inline-block;margin-right:10px}
+@media(max-width:680px){.battle-resources-title{min-height:45px;padding:10px 12px;font-size:13px}}
