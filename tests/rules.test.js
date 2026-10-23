@@ -15,9 +15,36 @@ function ready(level = 5, intelligence = 16) {
       ...(level >= 6 ? ['spell-refueling-ring', 'radiant-weapon'] : [])],
     active: ['mind-sharpener'],
   });
-  s.character.abilities.int = intelligence;
+  s.character.abilities = { str: 10, dex: 14, con: 14, int: intelligence, wis: 12, cha: 8 };
   return s;
 }
+
+test('first launch and full reset state are completely blank, with no saved character choices or history', () => {
+  const fresh = defaultState();
+  assert.equal(fresh.configured, false);
+  assert.equal(fresh.character.name, '');
+  assert.equal(fresh.character.level, 5);
+  assert.deepEqual(fresh.character.abilities, {str:null,dex:null,con:null,int:null,wis:null,cha:null});
+  for(const key of ['skills','cantrips','prepared','known','active']) assert.deepEqual(fresh.character[key], []);
+  assert.equal(fresh.character.notes, '');
+  assert.deepEqual(fresh.spent, {slots:[0,0],elixirs:0,genius:0,infusions:{}});
+  assert.equal(fresh.concentration, null);
+  assert.deepEqual(fresh.log, []);
+  assert.equal(fresh.updatedAt, null);
+  assert.deepEqual(restoreState(JSON.parse(JSON.stringify(fresh)), SPELLS, INFUSIONS), fresh);
+});
+
+test('partially entered attributes can be resumed but are rejected when a character is finalized', () => {
+  const draft = defaultState();
+  draft.character.name = 'Боба алхимик';
+  draft.character.abilities.int = 18;
+  const restored = restoreState(JSON.parse(JSON.stringify(draft)), SPELLS, INFUSIONS);
+  assert.equal(restored.character.abilities.int, 18);
+  assert.equal(restored.character.abilities.str, null);
+  assert.ok(validate(restored.character, SPELLS, INFUSIONS).length > 0);
+  draft.configured = true;
+  assert.throws(() => restoreState(draft, SPELLS, INFUSIONS));
+});
 
 test('2014 artificer level boundaries: slots, preparation, infusions and subclass features', () => {
   const expected = {
