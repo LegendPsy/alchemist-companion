@@ -7,6 +7,8 @@ export function spellActionKind(spell){
   return null; // e.g. one-minute casting times are not one-turn combat actions
 }
 
+export function bonusSpellRuleConflict(state,spells,next){const turn=state.turn||{},chosen=turn.chosen||{};const previousAction=spells.find(s=>s.name===chosen.action&&spellActionKind(s)==='action');const previousBonus=spells.find(s=>s.name===chosen.bonus&&spellActionKind(s)==='bonus');const kind=spellActionKind(next);if(kind==='action'&&next.level>0&&previousBonus)return 'После заклинания бонусным действием можно сотворить только заговор с временем сотворения «действие».';if(kind==='bonus'&&previousAction?.level>0)return 'После заклинания основным действием нельзя сотворить заклинание бонусным действием в тот же ход.';return null;}
+
 const GENERIC={
  action:[
   ['attack','Атака оружием','Одна атака оружием на уровнях 5–7; Дополнительной атаки у алхимика нет.'],
@@ -56,7 +58,7 @@ export function combatOptions(state,spells,infusions,kind){
   const c=state.character,available=(lv)=>Math.max(0,(lv===1?4:(c.level===7?3:2))-(state.spent?.slots?.[lv-1]||0));
   const known=new Set([...c.cantrips,...c.prepared]);
   const preparedSpells=spells.filter(s=>(s.always||known.has(s.id))&&spellActionKind(s)===kind)
-    .map(s=>({key:'spell:'+s.id,title:s.name,subtitle:(s.level?'Круг '+s.level:'Заговор')+' · '+s.range,detail:s.description,group:'Магия',disabled:s.level>0&&![1,2].some(lv=>lv>=s.level&&available(lv)>0),spell:s}));
+    .map(s=>({key:'spell:'+s.id,title:s.name,subtitle:(s.level?'Круг '+s.level:'Заговор')+' · '+s.range,detail:s.description,group:'Магия',disabled:(s.level>0&&![1,2].some(lv=>lv>=s.level&&available(lv)>0))||!!bonusSpellRuleConflict(state,spells,s),spell:s}));
   const infusionsActive=new Set(c.active);
   const gear=infusions.filter(i=>infusionsActive.has(i.id)&&INFUSION_ACTIONS[kind]?.[i.id])
     .map(i=>{const [title,detail]=INFUSION_ACTIONS[kind][i.id];const left=i.charges?Math.max(0,i.charges-(state.spent.infusions[i.id]||0)):null;
