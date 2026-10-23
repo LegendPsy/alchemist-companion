@@ -46,6 +46,17 @@ test('partially entered attributes can be resumed but are rejected when a charac
   assert.throws(() => restoreState(draft, SPELLS, INFUSIONS));
 });
 
+test('finishing character setup does not require class skills after removing their UI', () => {
+  for (const level of [5, 6, 7]) {
+    const s = ready(level);
+    s.character.skills = [];
+    assert.deepEqual(validate(s.character, SPELLS, INFUSIONS), []);
+    const restored = restoreState(JSON.parse(JSON.stringify(s)), SPELLS, INFUSIONS);
+    assert.equal(restored.configured, true);
+    assert.deepEqual(restored.character.skills, []);
+  }
+});
+
 test('2014 artificer level boundaries: slots, preparation, infusions and subclass features', () => {
   const expected = {
     5: { slots: [4, 2], prepared: 5, known: 4, active: 2, elixirs: 1, genius: 0 },
