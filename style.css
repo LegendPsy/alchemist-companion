@@ -65,3 +65,176 @@ header.brand{min-height:72px;border-bottom:2px solid #b99a65}header.brand>a{colo
 .choice-row .choice-check{flex:0 0 42px;min-width:42px;min-height:44px;cursor:pointer}
 .choice-row .choice-check input{width:22px;height:22px}
 .choice-row .chosen-dot{margin-left:0;color:#3f6b4d}
+
+
+/* iPhone layout · dense variant C (2026-10-23)
+   Compact in-app rhythm without crowding the iOS system areas.
+   Does not alter choices, resource state, or game rules. */
+@media (max-width:680px){
+  html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 8px)}
+  .shell{
+    padding:calc(env(safe-area-inset-top,0px) + 6px) 12px calc(56px + env(safe-area-inset-bottom,0px));
+    width:100%;
+    max-width:100%;
+  }
+  header.brand{
+    min-height:44px;
+    padding:5px 0;
+    gap:8px;
+  }
+  header.brand img{width:29px;height:29px}
+  .hero,.screen-spells .hero,.screen-infusions .hero,.screen-setup .hero{
+    padding:3px 0 9px;
+    margin:0 0 7px;
+    gap:8px;
+  }
+  .hero h1,.screen-setup .hero h1{
+    font-size:clamp(23px,6.7vw,27px);
+    line-height:1.12;
+    margin:0;
+  }
+  .hero .eyebrow{margin-bottom:3px!important}
+  .card{padding:12px;border-radius:12px}
+  .section-head{margin:11px 0 7px}
+  .section-head h2{font-size:20px;line-height:1.25}
+  .screen-setup{
+    padding-bottom:0;
+    min-width:0;
+  }
+  .shell:has(.screen-setup){padding-bottom:calc(57px + env(safe-area-inset-bottom,0px))}
+  .screen-setup .setup-tabs{
+    position:static;
+    margin:3px 0 8px;
+    padding:3px;
+    min-height:44px;
+    border-radius:11px;
+  }
+  .screen-setup .setup-tabs button{
+    min-height:37px;
+    padding:6px 7px;
+    font-size:12px;
+  }
+  .screen-setup .character-card,
+  .screen-setup .card{
+    margin:6px 0;
+    padding:11px;
+  }
+  .screen-setup .character-card .form-grid,
+  .screen-setup .form-grid{
+    grid-template-columns:minmax(0,1fr) 84px;
+    gap:8px;
+    margin:0 0 7px;
+  }
+  .screen-setup .form-grid label{
+    font-size:11px;
+    line-height:1.35;
+    gap:3px;
+  }
+  .screen-setup input:not([type=checkbox]):not([type=radio]),
+  .screen-setup select{
+    min-height:42px;
+    height:42px;
+    padding:6px 9px;
+    font-size:16px;
+  }
+  .screen-setup .character-card h3{
+    font-size:14px;
+    line-height:1.35;
+    margin:8px 0 5px;
+  }
+  .screen-setup .ability-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+    margin:6px 0 8px;
+  }
+  .screen-setup .ability-grid label{
+    padding:6px 5px 5px;
+    gap:2px;
+    min-width:0;
+    border-radius:10px;
+    font-size:10px;
+  }
+  .screen-setup .ability-grid input{
+    height:39px;
+    min-height:39px;
+    padding:5px 3px!important;
+    font-size:18px!important;
+    border-radius:8px;
+  }
+  .screen-setup .ability-grid .mod{
+    font-size:11px;
+    line-height:1.1;
+  }
+  .screen-setup .character-card>small{
+    display:block;
+    font-size:10px;
+    line-height:1.35;
+    margin-top:5px;
+  }
+  .screen-setup .backup-fold{
+    margin:7px 0 0;
+    padding:0 11px;
+    border-radius:10px;
+  }
+  .screen-setup .backup-fold summary{
+    min-height:42px;
+    padding:9px 0;
+    font-size:11px;
+    line-height:1.35;
+  }
+  .screen-setup .sticky-actions{
+    position:sticky;
+    bottom:calc(51px + env(safe-area-inset-bottom,0px));
+    left:auto;
+    transform:none;
+    width:100%;
+    padding:6px;
+    margin:9px 0 0;
+    border-radius:11px;
+    gap:7px;
+    flex-wrap:nowrap;
+    z-index:20;
+    justify-content:space-between;
+  }
+  .screen-setup .sticky-actions button{
+    min-height:44px;
+    padding:8px 11px;
+    font-size:12px;
+  }
+  .screen-setup .sticky-actions>.primary{
+    min-width:0;
+    flex:1;
+    width:auto;
+  }
+  body:has(.screen-setup input:focus) .screen-setup .sticky-actions,
+  body:has(.screen-setup select:focus) .screen-setup .sticky-actions{
+    position:static;
+  }
+  .bottom-nav{
+    gap:2px;
+    padding:4px 7px calc(3px + env(safe-area-inset-bottom,0px));
+    border-top-width:1px;
+  }
+  .bottom-nav button{
+    min-height:44px;
+    padding:3px 2px;
+    gap:2px;
+    font-size:10px;
+    line-height:1.1;
+    border-radius:8px;
+  }
+  .bottom-nav button span:first-child{font-size:17px}
+  .back-to-top{right:12px;bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+  body:has(.screen-setup) .back-to-top{bottom:calc(108px + env(safe-area-inset-bottom,0px))}
+  #toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+  .fold-stack{gap:7px;margin:8px 0 12px}
+  .fold>summary{min-height:46px;padding:9px 11px;font-size:13px}
+  .fold-list{padding:3px 8px 7px}
+}
+@media (max-width:370px){
+  .screen-setup .form-grid{grid-template-columns:minmax(0,1fr) 80px}
+  .screen-setup .character-card,.screen-setup .card{padding:9px}
+  .screen-setup .ability-grid{gap:4px}
+  .screen-setup .ability-grid label{padding:5px 3px}
+  .screen-setup .sticky-actions{padding:5px}
+}
