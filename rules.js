@@ -8,7 +8,6 @@ export function longRest(s){s.spent.slots=[0,0];s.spent.elixirs=0;s.spent.genius
 export function validate(c,spells,infusions){const l=limits(c),errors=[];
  if(![5,6,7].includes(c.level))errors.push('Выберите уровень 5, 6 или 7.');
  if(Object.values(c.abilities).some(v=>!Number.isInteger(v)||v<1||v>20))errors.push('Характеристики должны быть целыми числами от 1 до 20.');
- if(c.skills.length!==2||c.skills.some(id=>!['arcana','history','investigation','medicine','nature','perception','sleight-of-hand'].includes(id)))errors.push('Выберите 2 классовых навыка.');
  if(c.cantrips.length!==2)errors.push('Выберите ровно 2 заговора.');
  if(c.prepared.length<1||c.prepared.length>l.prepared)errors.push(`Подготовьте от 1 до ${l.prepared} заклинаний.`);
  if(c.known.length!==l.known)errors.push(`Выберите ${l.known} известных инфузий.`);
