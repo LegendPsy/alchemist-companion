@@ -134,7 +134,33 @@ backToTop.addEventListener('click',()=>{
  if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
  window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
 });
-render();updateBackToTop();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>toast('Офлайн-режим пока недоступен. Онлайн-приложение работает.'));
+render();
+updateBackToTop();
+
+// Keep Home Screen installations current while preserving all local character data.
+if('serviceWorker' in navigator){
+  const controlledOnLoad=Boolean(navigator.serviceWorker.controller);
+  let reloading=false;
+  let updatePending=false;
+  const reloadWhenVisible=()=>{
+    if(!controlledOnLoad||reloading)return;
+    if(document.visibilityState==='hidden'){updatePending=true;return;}
+    reloading=true;
+    window.location.reload();
+  };
+  navigator.serviceWorker.addEventListener('controllerchange',reloadWhenVisible);
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>{
+    const checkUpdate=()=>{
+      if(updatePending){reloadWhenVisible();return;}
+      if(document.visibilityState==='hidden'||navigator.onLine===false)return;
+      registration.update().catch(()=>{});
+    };
+    registration.update().catch(()=>{});
+    document.addEventListener('visibilitychange',checkUpdate);
+    window.addEventListener('pageshow',checkUpdate);
+    window.addEventListener('focus',checkUpdate);
+  }).catch(()=>toast('Офлайн-режим пока недоступен. Онлайн-приложение работает.'));
+}
 
 
 
